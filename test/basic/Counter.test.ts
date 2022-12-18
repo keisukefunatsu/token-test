@@ -3,7 +3,7 @@ import { expect } from "chai"
 import { BigNumber } from "ethers"
 import { ethers } from "hardhat"
 
-describe("Deploy", function () {
+describe("Counter", function () {
   const deployFixture = async () => {
     const CounterFactory = await ethers.getContractFactory('Counter')
     const Counter = await CounterFactory.deploy()

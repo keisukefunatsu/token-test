@@ -4,7 +4,7 @@ import { BigNumber } from "ethers"
 import { parseEther } from "ethers/lib/utils"
 import { ethers } from "hardhat"
 
-describe("Deployment", function () {
+describe("reentrancy attack", function () {
   const deployVulunerableFixture = async () => {
     const VictimContractFactory = await ethers.getContractFactory('Victim')
     const VictimContract = await VictimContractFactory.deploy()
@@ -19,7 +19,7 @@ describe("Deployment", function () {
     const AttackerContract = await AttackerContractFactory.deploy(VictimContract.address)
     return { VictimContract, AttackerContract }
   }
-  describe("reentrancy attack", function () {
+  describe("attack", function () {
     it("Should withdraw many times from ", async () => {
       const { VictimContract, AttackerContract } = await loadFixture(deployVulunerableFixture)
       const [attackerSigner] = await ethers.getSigners()
@@ -72,3 +72,5 @@ describe("Deployment", function () {
     })
   })
 })
+
+

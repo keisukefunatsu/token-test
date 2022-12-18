@@ -5,7 +5,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract KFToken is ERC20, ReentrancyGuard {
+contract TestToken is ERC20, ReentrancyGuard {
     uint256 public initialSupplyOfCommunity;
     address public communityAddress = address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8);
     constructor(uint256 initialSupply) ERC20("IIM Token", "IIM") {                

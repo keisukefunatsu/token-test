@@ -2,19 +2,19 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { expect } from "chai"
 import { ethers } from "hardhat"
 
-describe("KFToken", function () {
+describe("TestToken", function () {
   const deployFixture = async () => {
     const INITIAL_SUPPLY = 1000000
-    const KFTokenFactory = await ethers.getContractFactory('KFToken')
-    const KFToken = await KFTokenFactory.deploy(INITIAL_SUPPLY)
-    await KFToken.deployed()
-    return { KFToken }
+    const TestTokenFactory = await ethers.getContractFactory('TestToken')
+    const TestToken = await TestTokenFactory.deploy(INITIAL_SUPPLY)
+    await TestToken.deployed()
+    return { TestToken }
   }
   describe("Deployment", function () {
     it("Should set Initial Supply", async () => {
-      const { KFToken } = await loadFixture(deployFixture)
+      const { TestToken } = await loadFixture(deployFixture)
       const initialSupplyOfCommunity = 200000
-      expect(await KFToken.initialSupplyOfCommunity()).to.equal(initialSupplyOfCommunity)
+      expect(await TestToken.initialSupplyOfCommunity()).to.equal(initialSupplyOfCommunity)
     })
   })
 })

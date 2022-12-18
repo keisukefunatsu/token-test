@@ -1,13 +1,13 @@
 import { ethers } from "hardhat"
 
 async function main() {
-  const KFTokenFactory = await ethers.getContractFactory('KFToken')
-  const KFToken = await KFTokenFactory.deploy(10000)
-  await KFToken.deployed()
+  const TestTokenFactory = await ethers.getContractFactory('TestToken')
+  const TestToken = await TestTokenFactory.deploy(10000)
+  await TestToken.deployed()
 
-  const KFNFTFactory = await ethers.getContractFactory('KFNFT')
-  const KFNFT = await KFNFTFactory.deploy()
-  await KFNFT.deployed()
+  const TestNFTFactory = await ethers.getContractFactory('TestNFT')
+  const TestNFT = await TestNFTFactory.deploy()
+  await TestNFT.deployed()
 
 }
 

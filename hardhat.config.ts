@@ -14,7 +14,9 @@ const config: HardhatUserConfig = {
   networks: {
     local: {
       url: `http://localhost:8545`,
-      accounts: [LOCAL_PRIVATE_KEY]
+      accounts: [LOCAL_PRIVATE_KEY],
+      gas: 2100000,
+      gasPrice: 8000000000
     }
   }
 }
