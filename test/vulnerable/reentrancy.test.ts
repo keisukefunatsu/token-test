@@ -20,7 +20,7 @@ describe("reentrancy attack", function () {
     return { VictimContract, AttackerContract }
   }
   describe("attack", function () {
-    it("Should withdraw many times from ", async () => {
+    it("Should withdraw many times", async () => {
       const { VictimContract, AttackerContract } = await loadFixture(deployVulunerableFixture)
       const [attackerSigner] = await ethers.getSigners()
       let tx = await VictimContract.connect(attackerSigner).addBalance({
@@ -47,7 +47,7 @@ describe("reentrancy attack", function () {
       expect(contractBalance).to.equal(parseEther("11"))
     })
 
-    it("Should not withdraw many times from ", async () => {
+    it("Should not withdraw many times", async () => {
       const { VictimContract, AttackerContract } = await loadFixture(deploySecureFixture)
       const [attackerSigner] = await ethers.getSigners()
       let tx = await VictimContract.connect(attackerSigner).addBalance({
