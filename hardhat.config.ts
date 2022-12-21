@@ -18,7 +18,11 @@ const config: HardhatUserConfig = {
       gas: 2100000,
       gasPrice: 8000000000
     }
-  }
+  },
+  ignoreFiles: [
+    "InvalidContract.sol",
+    "./contracts/*"
+  ]
 }
 
 export default config
