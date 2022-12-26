@@ -72,9 +72,10 @@ contract DevsDAO is Ownable {
     }
 
     fallback() external payable {}
+    receive() external payable {}
 
     function getProposal(uint proposalIndex) external view returns (uint256) {
-        Proposal storage proposal = proposals[numProposals];
+        Proposal storage proposal = proposals[proposalIndex];
         return proposal.nftTokenId;
     }
 

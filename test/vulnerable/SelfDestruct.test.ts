@@ -15,7 +15,7 @@ describe("Self destruct attack", function () {
     return { MintByDepositing, SelfDesctructAttack, goodSigner, badSigner }
   }
   describe("attack", function () {
-    it("Should mint", async () => {
+    it("Should attack succeeded", async () => {
       const { MintByDepositing, SelfDesctructAttack, goodSigner, badSigner } = await loadFixture(deployFixture)
 
       // Start game

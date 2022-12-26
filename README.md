@@ -3,7 +3,7 @@
 - 基本的なコントラクト、フロントエンド
 - 脆弱性を再現してみる
 - DAO
-- ウォレットとかもやりたい
+- ウォレット
 
 Reference
 https://github.com/SunWeb3Sec/DeFiHackLabs
