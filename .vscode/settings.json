@@ -9,7 +9,11 @@
       "auto": true
     },
     {
-      "command": "npx hardhat compile",
+      "command": "npx hardhat compile && npx hardhat export-abi",
+      "auto": true
+    },
+    {
+      "command": "npx hardhat run --network localhost /workspaces/token-test/scripts/deploy.ts",
       "auto": true
     },
   ]

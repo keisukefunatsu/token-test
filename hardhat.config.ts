@@ -1,6 +1,8 @@
 import { HardhatUserConfig } from "hardhat/config"
 import "@nomicfoundation/hardhat-toolbox"
 import { config as dotenvConfig } from "dotenv"
+import 'hardhat-abi-exporter'
+
 
 dotenvConfig({ path: __dirname + '/.env' })
 
@@ -19,9 +21,11 @@ const config: HardhatUserConfig = {
       gasPrice: 8000000000
     }
   },
-  ignoreFiles: [
-    "InvalidContract.sol",
-    "./contracts/*"
+  abiExporter: [
+    {
+      path: './abi/json',
+      format: "json",
+    }
   ]
 }
 

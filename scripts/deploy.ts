@@ -1,14 +1,10 @@
 import { ethers } from "hardhat"
 
 async function main() {
-  const TestTokenFactory = await ethers.getContractFactory('TestToken')
-  const TestToken = await TestTokenFactory.deploy(10000)
-  await TestToken.deployed()
-
-  const TestNFTFactory = await ethers.getContractFactory('TestNFT')
-  const TestNFT = await TestNFTFactory.deploy()
-  await TestNFT.deployed()
-
+  const hankoTokenFactory = await ethers.getContractFactory('Hanko')
+  const hankoToken = await hankoTokenFactory.deploy('Hanko', 'HNK')
+  await hankoToken.deployed()
+  console.log(hankoToken.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
