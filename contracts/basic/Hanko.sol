@@ -46,7 +46,7 @@ contract Hanko is ERC721Enumerable, Ownable {
      * @dev Mint NFT to input address.
      * @param to is mint address.
      */
-    function mint(address to, string memory hankoTime) external onlyOwner {
+    function mint(address to, string memory hankoTime) external onlyOwner {        
         _mint(to, totalSupply());
         tokenURIDatas[totalSupply()] = TokenURIData(hankoTime);
     }

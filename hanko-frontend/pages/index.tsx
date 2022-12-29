@@ -1,43 +1,59 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import { useContext, useEffect, useState } from 'react'
-import { WalletContext } from '../contexts/wallet'
+import { useCallback, useEffect, useState } from 'react'
 import { Ethereum } from '../domains/type'
-import Web3 from 'web3';
+import Web3 from 'web3'
 import styles from '../styles/Home.module.css'
-import Layout from '../components/Layout';
-import Head from 'next/head';
-import { HANKOCONTRACT, HANKOCONTRACT_ABI } from '../domains/env';
-import { ethers } from 'ethers';
+import Layout from '../components/Layout'
+import Head from 'next/head'
+import { HANKOCONTRACT, HANKOCONTRACT_ABI } from '../domains/env'
+import { BigNumber, ethers } from 'ethers'
+import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
+import { JsonRpcSigner } from '@ethersproject/providers'
 
 let ethereum: Ethereum
 if (typeof window !== "undefined") {
   ethereum = (window as any)?.ethereum
 }
+
+type MintForm = {
+  hankoTime: string
+}
+
+type HankoNFT = {
+  id: number
+  hankoTime: string
+}
+
 export default function Home() {
   const [_account, setAccount] = useState<any>()
   const [_walletConnected, setWalletConnected] = useState<any>()
+  const [hankoList, setHankoList] = useState<Array<HankoNFT>>()
+  const { register, handleSubmit, formState: { errors } } = useForm<MintForm>()
   // const { connectMetamask, account, walletConnected } = useContext(WalletContext)
   const onHandleConnectButton = async () => {
-    const provider = await detectEthereumProvider({ mustBeMetaMask: true });
+    const provider = await detectEthereumProvider({ mustBeMetaMask: true })
     if (provider && ethereum.isMetaMask) {
-      const web3 = new Web3(Web3.givenProvider);
-      // web3.eth.defaultChain = "kovan";
-      const accounts = await web3.eth.requestAccounts();
-      setAccount(accounts[0]);
+      const web3 = new Web3(Web3.givenProvider)
+      // web3.eth.defaultChain = "kovan"
+      const accounts = await web3.eth.requestAccounts()
+      setAccount(accounts[0])
       setWalletConnected(true)
     }
   }
-  useEffect(() => {
-    const f = async () => {
-      await onHandleConnectButton()
-    }
-    f()
-  }, [])
 
+
+  const isValid: SubmitHandler<MintForm> = (data: MintForm) => {
+    mint(data.hankoTime)
+  }
+  const isInValid: SubmitErrorHandler<MintForm> = (errors: any) => {
+    console.log(errors)
+    alert("mintできませんでした。日付を指定してください。")
+  }
   const listNFT = async () => {
     if (!HANKOCONTRACT) {
       throw Error('Set HANKOCONTRACT')
     }
+    let nfts: any[] = []
     const provider = new ethers.providers.Web3Provider(ethereum)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(
@@ -47,17 +63,24 @@ export default function Home() {
     )
     await contract
       .listNFT()
-      .then((res: any) => {
-        console.log(res)
-        return res
+      .then((res: any[][]) => {
+        const keys = res[0]
+        const vals = res[1]
+        nfts = keys.map((h, i) => {
+          return {
+            id: h,
+            hankoTime: vals[i]
+          }
+        })
+
       })
       .catch((err: any) => {
         console.log(err)
         alert('failed to List NFT')
       })
-    return []
+    return nfts
   }
-  const mint = async (): Promise<void> => {
+  const mint = async (hankoTime: string): Promise<void> => {
     if (!HANKOCONTRACT) {
       throw Error('Set HANKOCONTRACT')
     }
@@ -69,7 +92,7 @@ export default function Home() {
       signer
     )
     await contract
-      .mint(await signer.getAddress(), '20230101')
+      .mint(await signer.getAddress(), hankoTime)
       .then((res: any) => {
         console.log(res)
       })
@@ -78,6 +101,24 @@ export default function Home() {
         alert('failed to mint')
       })
   }
+
+  const f = useCallback(async () => {
+    await onHandleConnectButton()
+  }, [])
+  const g = async () => {
+    const nfts = await listNFT()
+    setHankoList(nfts)
+  }
+  useEffect(() => {
+    if (!hankoList) {
+      f()
+    }
+  }, [hankoList, f])
+
+  if (_account && !hankoList) {
+    g()
+  }
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -103,17 +144,35 @@ export default function Home() {
 
           </header>
           <h1 className={styles.title}>
-            hanko
+            はんこ
           </h1>
 
-          <button
-            onClick={mint}>
-            Mint
-          </button>
-          <button
-            onClick={listNFT}>
-            ListNFT
-          </button>
+          <form onSubmit={handleSubmit(isValid, isInValid)}>
+            日付
+            <div>
+              <input type="date" {...register('hankoTime', { required: '日付指定が必要です' })} />
+            </div>
+
+            <button
+              type='submit'
+            >
+              Mint
+            </button>
+          </form>
+
+          <div>
+            <h2>HankoList</h2>
+            {
+              hankoList?.map((h, i) => {
+                return (
+                  <div key={i}>
+                    <p>id: {BigNumber.from("2").toString()}</p>
+                    <p>time: {h.hankoTime}</p>
+                  </div>
+                )
+              })
+            }
+          </div>
         </main >
 
         <footer className={styles.footer}>
