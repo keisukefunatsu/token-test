@@ -1,5 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { Ethereum } from '../domains/type'
 import Web3 from 'web3'
 import styles from '../styles/Home.module.css'
@@ -8,7 +8,7 @@ import Head from 'next/head'
 import { HANKOCONTRACT, HANKOCONTRACT_ABI } from '../domains/env'
 import { BigNumber, ethers } from 'ethers'
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form"
-import { JsonRpcSigner } from '@ethersproject/providers'
+import { WalletContext } from '../contexts/wallet'
 
 let ethereum: Ethereum
 if (typeof window !== "undefined") {
@@ -25,22 +25,9 @@ type HankoNFT = {
 }
 
 export default function Home() {
-  const [_account, setAccount] = useState<any>()
-  const [_walletConnected, setWalletConnected] = useState<any>()
-  const [hankoList, setHankoList] = useState<Array<HankoNFT>>()
+  const [hankoList, setHankoList] = useState<Array<HankoNFT> | undefined>()
   const { register, handleSubmit, formState: { errors } } = useForm<MintForm>()
-  // const { connectMetamask, account, walletConnected } = useContext(WalletContext)
-  const onHandleConnectButton = async () => {
-    const provider = await detectEthereumProvider({ mustBeMetaMask: true })
-    if (provider && ethereum.isMetaMask) {
-      const web3 = new Web3(Web3.givenProvider)
-      // web3.eth.defaultChain = "kovan"
-      const accounts = await web3.eth.requestAccounts()
-      setAccount(accounts[0])
-      setWalletConnected(true)
-    }
-  }
-
+  const { connectMetamask, account, walletConnected } = useContext(WalletContext)
 
   const isValid: SubmitHandler<MintForm> = (data: MintForm) => {
     mint(data.hankoTime)
@@ -64,8 +51,7 @@ export default function Home() {
     await contract
       .listNFT()
       .then((res: any[][]) => {
-        const keys = res[0]
-        const vals = res[1]
+        const [keys, vals] = res
         nfts = keys.map((h, i) => {
           return {
             id: h,
@@ -77,6 +63,7 @@ export default function Home() {
       .catch((err: any) => {
         console.log(err)
         alert('failed to List NFT')
+
       })
     return nfts
   }
@@ -103,21 +90,21 @@ export default function Home() {
   }
 
   const f = useCallback(async () => {
-    await onHandleConnectButton()
-  }, [])
-  const g = async () => {
+    await connectMetamask()
+  }, [connectMetamask])
+  const g = useCallback(async () => {
     const nfts = await listNFT()
     setHankoList(nfts)
-  }
+  }, [])
   useEffect(() => {
-    if (!hankoList) {
+    if (account === '') {
       f()
     }
-  }, [hankoList, f])
+    if (account !== '' && !hankoList) {
+      g()
+    }
+  }, [account, hankoList, connectMetamask, f, g])
 
-  if (_account && !hankoList) {
-    g()
-  }
 
   return (
     <Layout>
@@ -130,13 +117,13 @@ export default function Home() {
 
         <main className={styles.main}>
           <header>
-            {_walletConnected ?
+            {walletConnected ?
               (<p>
-                Your address: {_account}
+                Your address: {account}
               </p>
               ) :
               (<button
-                onClick={() => { onHandleConnectButton() }}
+                onClick={() => { () => connectMetamask() }}
               >
                 Metamsk Login
               </button>)
@@ -166,8 +153,8 @@ export default function Home() {
               hankoList?.map((h, i) => {
                 return (
                   <div key={i}>
-                    <p>id: {BigNumber.from("2").toString()}</p>
-                    <p>time: {h.hankoTime}</p>
+                    <p>id: {BigNumber.from(h.id).toString()}</p>
+                    <p>time: {h.hankoTime || 'unknown'}</p>
                   </div>
                 )
               })
