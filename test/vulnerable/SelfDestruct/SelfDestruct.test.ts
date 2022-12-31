@@ -1,6 +1,6 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { expect } from "chai"
-import { BigNumber, ContractTransaction } from "ethers"
+import { ContractTransaction } from "ethers"
 import { parseEther } from "ethers/lib/utils"
 import { ethers } from "hardhat"
 
