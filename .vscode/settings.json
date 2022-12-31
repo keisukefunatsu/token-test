@@ -1,6 +1,10 @@
 {
   "runTerminalCommand.commands": [
     {
+      "command": "CD=$(pwd) && cd /workspaces/token-test && npx hardhat test $CD/*",
+      "auto": true
+    },
+    {
       "command": "npx hardhat test",
       "auto": true
     },
