@@ -1,10 +1,6 @@
 {
   "runTerminalCommand.commands": [
     {
-      "command": "npx hardhat test ./*",
-      "auto": true
-    },
-    {
       "command": "npx hardhat test",
       "auto": true
     },
@@ -15,6 +11,6 @@
     {
       "command": "npx hardhat run --network localhost /workspaces/token-test/scripts/deploy.ts",
       "auto": true
-    },
+    }
   ]
 }
