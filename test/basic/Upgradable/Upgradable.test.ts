@@ -8,39 +8,41 @@ import { beforeEach } from 'node:test'
 describe('Proxy', function () {
   const deployFixture = async () => {
     const [deployer, ...signers] = await ethers.getSigners()
-    const BuggyProxyFactory = await ethers.getContractFactory('BuggyProxy')
-    const BuggyProxy = await BuggyProxyFactory.connect(deployer).deploy()
-    await BuggyProxy.deployed()
-    const GoodProxyFactory = await ethers.getContractFactory('GoodProxy')
-    const GoodProxy = await GoodProxyFactory.connect(deployer).deploy()
-    await GoodProxy.deployed()
+    const ProxyFactory = await ethers.getContractFactory('Proxy')
+    const Proxy = await ProxyFactory.connect(deployer).deploy()
+    await Proxy.deployed()
+    const TestSlotFactory = await ethers.getContractFactory('TestSlot')
+    const TestSlot = await TestSlotFactory.connect(deployer).deploy()
+    await TestSlot.deployed()
     const CounterV1Factory = await ethers.getContractFactory('CounterV1')
     const CounterV1 = await CounterV1Factory.connect(deployer).deploy()
     await CounterV1.deployed()
     const CounterV2Factory = await ethers.getContractFactory('CounterV2')
     const CounterV2 = await CounterV2Factory.connect(deployer).deploy()
     await CounterV2.deployed()
-    return { BuggyProxy, GoodProxy, CounterV1, CounterV2, deployer, signers }
+    return { Proxy, TestSlot, CounterV1, CounterV2, deployer, signers }
   }
-  describe('Buggy Proxy', function () {
-    it('Should not increment', async () => {
-      const { BuggyProxy, CounterV1, deployer } = await loadFixture(deployFixture)
-      await BuggyProxy.connect(deployer).upgradeTo(CounterV1.address)
-      // https://ethereum.stackexchange.com/questions/120787/testing-proxies-with-hardhat
-      await CounterV1.connect(deployer).attach(BuggyProxy.address).increment()
-      // Nto incremented
-      expect(await CounterV1.count()).to.equal(0)
-    })
-  })
-  describe('Good Proxy', function () {
+  describe('Proxy', function () {
     it('Should increment', async () => {
-      const { GoodProxy, CounterV1, deployer } = await loadFixture(deployFixture)
-      await GoodProxy.connect(deployer).upgradeTo(CounterV1.address)
+      const { Proxy, CounterV1, deployer } = await loadFixture(deployFixture)
+      await Proxy.connect(deployer).upgradeTo(CounterV1.address)
+      expect(await Proxy.implementation()).to.equal(CounterV1.address)
 
       // https://ethereum.stackexchange.com/questions/120787/testing-proxies-with-hardhat
-      await CounterV1.connect(deployer).attach(GoodProxy.address).increment()
+      const proxied = CounterV1.attach(Proxy.address)
+      await proxied.increment()
       // incremented
-      expect(await CounterV1.count()).to.equal(1)
+      expect(await proxied.connect(deployer).count()).to.equal(1)
+    })
+  })
+
+  describe('Slot', function () {
+    it('should write slot', async () => {
+      const { TestSlot, deployer } = await loadFixture(deployFixture)
+      expect(await TestSlot.connect(deployer).getSlot()).to.equal(ethers.constants.AddressZero)
+      await TestSlot.connect(deployer).writeSlot(deployer.address)
+      expect(await TestSlot.connect(deployer).getSlot()).to.equal(deployer.address)
+
     })
   })
 })
