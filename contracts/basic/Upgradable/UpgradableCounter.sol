@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.17;
 
+import "hardhat/console.sol";
+
 contract CounterV1 {
     uint public count;
 
@@ -13,11 +15,11 @@ contract CounterV2 {
     uint public count;
 
     function increment() external {
-        count += 1;
+        count += 10;
     }
 
     function decrement() external {
-        count -= 1;
+        count -= 10;
     }
 }
 
@@ -29,6 +31,10 @@ contract Proxy {
 
     constructor() {
         _setAdmin(msg.sender);
+    }
+
+    function get_implslot() public view returns (address) {
+        return StorageSlot.getAddressSlot(IMPLEMENTATION_SLOT).value;
     }
 
     function _delegate(address _implementation) private {
@@ -106,7 +112,7 @@ contract Proxy {
 
     function _setImplementation(address _implementation) private {
         require(_implementation.code.length > 0, "not a contract");
-        StorageSlot.getAddressSlot(ADMIN_SLOT).value = _implementation;
+        StorageSlot.getAddressSlot(IMPLEMENTATION_SLOT).value = _implementation;
     }
 
     function admin() external adminOnly returns (address) {
@@ -126,7 +132,7 @@ contract ProxyAdmin {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "not authrized");
+        require(msg.sender == owner, "not authorized");
         _;
     }
 
