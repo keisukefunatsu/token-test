@@ -6,34 +6,37 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract BasicTicketNFT is ERC721 {
-  using Counters for Counters.Counter;
-  Counters.Counter private _ticketIds;
-  address public owner;
+    using Counters for Counters.Counter;
+    Counters.Counter private _ticketIds;
+    address public owner;
 
-  struct Seller {
-    string itemName;
-    uint ticketId;
-  }
-  
-  struct Ticket {
-    string name;
-    uint price;
-    bool isOwned;
-  }
+    struct Seller {
+        string itemName;
+        uint ticketId;
+    }
 
-  modifier onlyOwner() {
-    require(msg.sender == owner, 'Only owner');
-    _;
-  }
+    struct Ticket {
+        string name;
+        uint price;
+        bool isOwned;
+    }
 
-  mapping (uint => Ticket) tickets;
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner");
+        _;
+    }
 
-  constructor(string memory _name, string memory _symbol)  ERC721(_name, _symbol) {
-    owner = msg.sender;
-  }
+    mapping(uint => Ticket) tickets;
 
-  function mint(uint _sellerId) public payable {
-    require(msg.value == 0.01 ether, 'Not exactly ETH sent');
-    _safeMint(msg.sender, _sellerId);
-  }
+    constructor(
+        string memory _name,
+        string memory _symbol
+    ) ERC721(_name, _symbol) {
+        owner = msg.sender;
+    }
+
+    function mint(uint _sellerId) public payable {
+        require(msg.value == 0.01 ether, "Not exactly ETH sent");
+        _safeMint(msg.sender, _sellerId);
+    }
 }
