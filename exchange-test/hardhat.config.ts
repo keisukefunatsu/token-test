@@ -2,6 +2,8 @@ import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
 import { config as dotenvConfig } from 'dotenv'
 import 'hardhat-abi-exporter'
+import 'hardhat-watcher'
+
 
 
 dotenvConfig({ path: __dirname + '/.env' })
@@ -34,7 +36,7 @@ const config: HardhatUserConfig = {
       path: './abi/json',
       format: 'json'
     }
-  ]
+  ],
 }
 
 export default config
