@@ -3,6 +3,7 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "hardhat/console.sol";
 
 contract TestToken is ERC20 {
     uint256 initialSupply = 10000 * (10 ** 18);
@@ -39,10 +40,17 @@ contract Exchange is ERC20 {
             _mint(msg.sender, liquidity);
         } else {
             uint ethReserve = ethBalance = msg.value;
+            console.log("ethReserve:", ethReserve);
 
             uint cryptoDevTokenAmount = (msg.value * cryptoDevTokenReserve) /
                 (ethReserve);
-
+            console.log("cryptoDevTokenAmount:", cryptoDevTokenAmount);
+            console.log(
+                "_amount:",
+                cryptoDevTokenAmount,
+                ", cryptoDevTokenAmount:",
+                cryptoDevTokenAmount
+            );
             require(
                 _amount >= cryptoDevTokenAmount,
                 "Sent token amount is less than minumum amount required"

@@ -36,25 +36,12 @@
   },
   {
     "inputs": [],
-    "name": "get_adminslot",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "get_implslot",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "",
-        "type": "bytes32"
+        "type": "address"
       }
     ],
     "stateMutability": "view",

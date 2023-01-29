@@ -30,7 +30,7 @@ describe("Exchange", function () {
       const { Exchange, TestToken, signers } = await loadFixture(deployFixture)
       const decimals = await TestToken.decimals()
       const addAmount = utils.parseUnits('1', decimals)
-      const addAmount2 = utils.parseUnits('0.5', decimals)
+      const addAmount2 = utils.parseUnits('0.01', decimals)
       await TestToken.connect(signers[0]).approve(Exchange.address, addAmount)
       await Exchange.connect(signers[0]).addLiquidity(addAmount, {
         value: parseEther('1.0')
@@ -45,10 +45,10 @@ describe("Exchange", function () {
 
       // await TestToken.connect(signers[1]).approve(Exchange.address, addAmount2)
       // await Exchange.connect(signers[1]).addLiquidity(addAmount2, {
-      //   value: parseEther('0.5')
+      //   value: parseEther('0.01')
       // })
 
-      console.log('liquidity:', await Exchange.balanceOf(signers[2].address))
+      console.log('liquidity:', await Exchange.balanceOf(signers[1].address))
     })
   })
 })

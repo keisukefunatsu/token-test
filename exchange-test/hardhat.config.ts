@@ -2,7 +2,7 @@ import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
 import { config as dotenvConfig } from 'dotenv'
 import 'hardhat-abi-exporter'
-import 'hardhat-watcher'
+import 'solidity-coverage'
 
 
 
