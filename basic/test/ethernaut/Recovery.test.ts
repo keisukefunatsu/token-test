@@ -5,7 +5,7 @@ import { parseEther } from 'ethers/lib/utils'
 import { ethers } from 'hardhat'
 import simpleTokenABI from "../../abi/json/contracts/ethernaut/Recovery.sol/SimpleToken.json"
 
-describe('Proxy', function () {
+describe('Recovery', function () {
   const deployFixture = async () => {
     const [deployer, ...signers] = await ethers.getSigners()
     const RecoveryFactory = await ethers.getContractFactory('Recovery')
@@ -17,7 +17,7 @@ describe('Proxy', function () {
     return { Recovery, MyRecovery, deployer }
   }
 
-  describe('Recovery', function () {
+  describe('Solution', function () {
     it('assume its token contract address and call it correctly', async () => {
       const { Recovery, MyRecovery, deployer } = await loadFixture(deployFixture)
       await Recovery.connect(deployer).generateToken("Test Token", 10000)
