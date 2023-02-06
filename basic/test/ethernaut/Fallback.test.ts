@@ -10,7 +10,7 @@ describe('Fallback', function () {
     const FallbackFactory = await ethers.getContractFactory('EthernautFallback')
     const Fallback = await FallbackFactory.connect(deployer).deploy()
     await Fallback.deployed()
-    const AttackFactory = await ethers.getContractFactory('EthernautAttack')
+    const AttackFactory = await ethers.getContractFactory('EthernautFallbackAttack')
     const Attack = await AttackFactory.connect(signers[0]).deploy(Fallback.address)
     await Attack.deployed()
     return { Fallback, Attack, deployer, signers }
@@ -37,7 +37,7 @@ describe('Fallback', function () {
       await Attack.connect(signers[0]).Exploit({ value: parseEther("0.0001"), gasLimit: 5000000 })
 
       expect(await Fallback.owner()).to.equal(Attack.address)
-      console.log(await ethers.provider.getBalance(Attack.address))
+      // console.log(await ethers.provider.getBalance(Attack.address))
     })
   })
 })
