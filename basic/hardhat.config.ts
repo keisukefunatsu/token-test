@@ -12,7 +12,12 @@ if (LOCAL_PRIVATE_KEY === '') {
 }
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.17",
+  solidity: {
+    compilers: [
+      { version: "0.8.17" },
+      { version: "0.6.12" }
+    ]
+  },
   networks: {
     local: {
       url: `http://localhost:8545`,
