@@ -7,7 +7,7 @@ const PASSWORD = '123456789'
 describe('Vault', function () {
   const deployFixture = async () => {
     const [deployer, ...signers] = await ethers.getSigners()
-    const VaultFactory = await ethers.getContractFactory('Vault')
+    const VaultFactory = await ethers.getContractFactory('EthernautVault')
     const Vault = await VaultFactory.connect(deployer).deploy(utils.formatBytes32String(PASSWORD))
     await Vault.deployed()
     return { Vault, deployer, signers }

@@ -1,0 +1,20 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "payable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
+      }
+    ],
+    "name": "attack",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]
