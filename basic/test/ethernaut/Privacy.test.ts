@@ -40,8 +40,6 @@ describe('Privacy', function () {
       // console.log(key)
       await Privacy.connect(signers[0]).unlock('0x' + key.substring(2, 34))
       expect(await Privacy.locked()).to.equal(false)
-
-      // console.log(await ethers.provider.getStorageAt(Privacy.address, 5))
     })
   })
 })
