@@ -17,13 +17,12 @@ describe('EthernautGatekeeperOne', function () {
   }
 
   describe('Solution', function () {
-    it('take ownership', async () => {
+    it('should be entrant', async () => {
       const { EthernautGatekeeperOne, Attack, deployer, signers } = await loadFixture(deployFixture)
       expect(await EthernautGatekeeperOne.entrant()).to.equal(ethers.constants.AddressZero)
-      const data = utils.arrayify("12sss3")
-      console.log(data)
-      await Attack.connect(signers[0]).attack(data)
-      // console.log(await Attack.connect(signers[0]).test(utils.toUtf8Bytes("123")))      
+      await Attack.connect(signers[0]).attack()
+      //  Not solved yet
+      // expect(await EthernautGatekeeperOne.entrant()).to.equal(signers[0].address)
     })
   })
 })

