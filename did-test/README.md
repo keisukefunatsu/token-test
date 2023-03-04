@@ -1,3 +1,10 @@
+deploy sample
+
+```
+npx hardhat run --network polygon scripts/deploy.ts
+```
+
+
 verify sample
 
 ```

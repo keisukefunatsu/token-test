@@ -4,7 +4,7 @@ import { BigNumber, Contract } from 'ethers'
 import { parseEther } from 'ethers/lib/utils'
 import { ethers } from 'hardhat'
 
-describe('CoinFlip', function () {
+describe('TestToken', function () {
   const deployFixture = async () => {
     const [deployer, ...signers] = await ethers.getSigners()
     const TestTokenFactory = await ethers.getContractFactory('TestToken')
@@ -18,6 +18,7 @@ describe('CoinFlip', function () {
     it('can deploy', async () => {
       const { TestToken, deployer, signers } = await loadFixture(deployFixture)
       console.log(await TestToken.name())
+      console.log(await TestToken.connect(deployer).totalSupply())
     })
   })
 })
