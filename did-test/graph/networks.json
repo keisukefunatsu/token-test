@@ -1,0 +1,12 @@
+{
+  "matic": {
+    "TestToken": {
+      "address": "0x1b62d4Bc035F2Fcb020Ca9d3B040BbEd35B508C3",
+      "startBlock": 39953248
+    },
+    "TestToken2": {
+      "address": "0x57C0Effd64e1c12985390807ba2876b07a2BbedB",
+      "startBlock": 39953248
+    }
+  }
+}
